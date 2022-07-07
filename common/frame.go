@@ -567,7 +567,7 @@ func (f *Frame) waitForFunction(
 
 	execCtx := f.executionContexts[world]
 	if execCtx == nil {
-		return nil, fmt.Errorf("execution context %q not found", world)
+		return nil, fmt.Errorf("execution context %q not found; most likely because of a navigation", world)
 	}
 	injected, err := execCtx.getInjectedScript(apiCtx)
 	if err != nil {
@@ -932,7 +932,7 @@ func (f *Frame) EvaluateHandle(pageFunc goja.Value, args ...goja.Value) (handle 
 	{
 		ec := f.executionContexts[mainWorld]
 		if ec == nil {
-			k6ext.Panic(f.ctx, "execution context %q not found", mainWorld)
+			k6ext.Panic(f.ctx, "execution context %q not found; most likely because of a navigation", mainWorld)
 		}
 		handle, err = ec.EvalHandle(f.ctx, pageFunc, args...)
 	}
@@ -1856,7 +1856,7 @@ func (f *Frame) adoptBackendNodeID(world executionWorld, id cdp.BackendNodeID) (
 
 	ec := f.executionContexts[world]
 	if ec == nil {
-		return nil, fmt.Errorf("execution context %q not found", world)
+		return nil, fmt.Errorf("execution context %q not found; most likely because of a navigation", world)
 	}
 	return ec.adoptBackendNodeID(id)
 }
@@ -1873,7 +1873,7 @@ func (f *Frame) evaluate(
 
 	ec := f.executionContexts[world]
 	if ec == nil {
-		return nil, fmt.Errorf("execution context %q not found", world)
+		return nil, fmt.Errorf("execution context %q not found; most likely because of a navigation", world)
 	}
 
 	evalArgs := make([]interface{}, 0, len(args))

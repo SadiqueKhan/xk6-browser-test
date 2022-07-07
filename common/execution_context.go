@@ -224,7 +224,7 @@ func (e *ExecutionContext) eval(
 	if remoteObject, exceptionDetails, err = action.Do(cdp.WithExecutor(apiCtx, e.session)); err != nil {
 		var cdpe *cdproto.Error
 		if errors.As(err, &cdpe) && cdpe.Code == -32000 {
-			err = fmt.Errorf("execution context with ID %d not found", e.id)
+			err = fmt.Errorf("execution context with ID %d not found; most likely because of a navigation", e.id)
 		}
 		return nil, err
 	}
