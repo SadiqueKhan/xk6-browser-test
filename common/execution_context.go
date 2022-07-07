@@ -152,7 +152,7 @@ func (e *ExecutionContext) adoptElementHandle(eh *ElementHandle) (*ElementHandle
 		efid, esid)
 
 	if eh.execCtx == e {
-		return nil, errors.New("already belongs to the execution context")
+		return nil, errors.New("already belongs to the same execution context")
 	}
 	if e.frame == nil {
 		return nil, errors.New("does not have a frame owner")
