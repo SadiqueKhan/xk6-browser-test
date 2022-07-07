@@ -156,7 +156,7 @@ func (m *Mouse) Click(x float64, y float64, opts goja.Value) {
 		k6ext.Panic(m.ctx, "parsing click options: %w", err)
 	}
 	if err := m.click(x, y, mouseOpts); err != nil {
-		k6ext.Panic(m.ctx, "mouse click: %w", err)
+		k6ext.Panic(m.ctx, "clicking mouse: %w", err)
 	}
 }
 
@@ -166,7 +166,7 @@ func (m *Mouse) DblClick(x float64, y float64, opts goja.Value) {
 		k6ext.Panic(m.ctx, "parsing dblclick options: %w", err)
 	}
 	if err := m.dblClick(x, y, mouseOpts); err != nil {
-		k6ext.Panic(m.ctx, "mouse double click: %w", err)
+		k6ext.Panic(m.ctx, "double clicking mouse: %w", err)
 	}
 }
 
@@ -177,7 +177,7 @@ func (m *Mouse) Down(x float64, y float64, opts goja.Value) {
 		k6ext.Panic(m.ctx, "parsing down options: %w", err)
 	}
 	if err := m.down(x, y, mouseOpts); err != nil {
-		k6ext.Panic(m.ctx, "mouse down: %w", err)
+		k6ext.Panic(m.ctx, "pressing mouse down: %w", err)
 	}
 }
 
@@ -188,7 +188,7 @@ func (m *Mouse) Move(x float64, y float64, opts goja.Value) {
 		k6ext.Panic(m.ctx, "parsing move options: %w", err)
 	}
 	if err := m.down(x, y, mouseOpts); err != nil {
-		k6ext.Panic(m.ctx, "mouse move: %w", err)
+		k6ext.Panic(m.ctx, "moving mouse to x:%f y:%f: %w", x, y, err)
 	}
 }
 
@@ -199,7 +199,7 @@ func (m *Mouse) Up(x float64, y float64, opts goja.Value) {
 		k6ext.Panic(m.ctx, "parsing up options: %w", err)
 	}
 	if err := m.up(x, y, mouseOpts); err != nil {
-		k6ext.Panic(m.ctx, "mouse up: %w", err)
+		k6ext.Panic(m.ctx, "releasing mouse up: %w", err)
 	}
 }
 
