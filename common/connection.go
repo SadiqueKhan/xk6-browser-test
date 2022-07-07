@@ -24,6 +24,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
 	"sync"
@@ -234,7 +235,7 @@ func (c *Connection) createSession(info *target.Info) (*Session, error) {
 }
 
 func (c *Connection) handleIOError(err error) {
-	c.logger.Errorf("Connection:handleIOError", "err:%v", err)
+	c.logger.Errorf("Connection:handleIOError", "internal error communicating over WebSocket: %v", err)
 
 	if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
 		// Report an unexpected closure
@@ -378,20 +379,17 @@ func (c *Connection) send(ctx context.Context, msg *cdproto.Message, recvCh chan
 	case c.sendCh <- msg:
 	case err := <-c.errorCh:
 		c.logger.Debugf("Connection:send:<-c.errorCh", "wsURL:%q sid:%v, err:%v", c.wsURL, msg.SessionID, err)
-		return err
+		return fmt.Errorf("sending message to browser over WebSocket: %w", err)
 	case code := <-c.closeCh:
 		c.logger.Debugf("Connection:send:<-c.closeCh", "wsURL:%q sid:%v, websocket code:%v", c.wsURL, msg.SessionID, code)
 		_ = c.closeConnection(code)
-		return &websocket.CloseError{Code: code}
+		return fmt.Errorf("closing the WebSocket communication with the browser: %w", &websocket.CloseError{Code: code})
+	case <-ctx.Done():
+		c.logger.Debugf("Connection:send:<-ctx.Done", "wsURL:%q sid:%v err:%v", c.wsURL, msg.SessionID, c.ctx.Err())
+		return fmt.Errorf("%w", ctx.Err())
 	case <-c.done:
 		c.logger.Debugf("Connection:send:<-c.done", "wsURL:%q sid:%v", c.wsURL, msg.SessionID)
 		return nil
-	case <-ctx.Done():
-		c.logger.Errorf("Connection:send:<-ctx.Done()", "wsURL:%q sid:%v err:%v", c.wsURL, msg.SessionID, c.ctx.Err())
-		return ctx.Err()
-	case <-c.ctx.Done():
-		c.logger.Errorf("Connection:send:<-c.ctx.Done()", "wsURL:%q sid:%v err:%v", c.wsURL, msg.SessionID, c.ctx.Err())
-		return ctx.Err()
 	}
 
 	// Block waiting for response.
