@@ -656,14 +656,14 @@ func (f *Frame) waitForSelector(selector string, opts *FrameWaitForSelectorOptio
 
 	ec := f.executionContexts[mainWorld]
 	if ec == nil {
-		return nil, fmt.Errorf("wait for selector %q cannot find execution context: %q", selector, mainWorld)
+		return nil, fmt.Errorf("wait for selector %q execution context is missing: %q", selector, mainWorld)
 	}
 	// an element should belong to the current execution context.
 	// otherwise, we should adopt it to this execution context.
 	if ec != handle.execCtx {
 		defer handle.Dispose()
 		if handle, err = ec.adoptElementHandle(handle); err != nil {
-			return nil, fmt.Errorf("wait for selector %q cannot adopt element handle: %w", selector, err)
+			return nil, fmt.Errorf("wait for selector %q adopting element handle: %w", selector, err)
 		}
 	}
 
