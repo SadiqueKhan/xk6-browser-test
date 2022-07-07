@@ -687,7 +687,7 @@ func (h *ElementHandle) waitForElementState(
 	}
 
 	return false, fmt.Errorf(
-		"waiting states %v of element %q", states, reflect.TypeOf(result))
+		"waiting for states %v of element %q", states, reflect.TypeOf(result))
 }
 
 func (h *ElementHandle) waitForSelector(apiCtx context.Context, selector string, opts *FrameWaitForSelectorOptions) (*ElementHandle, error) {
@@ -1079,7 +1079,7 @@ func (h *ElementHandle) queryAll(selector string, eval evalFunc) ([]api.ElementH
 		parsedSelector,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("querying all selectors %q: %w", selector, err)
+		return nil, fmt.Errorf("querying all selector %q: %w", selector, err)
 	}
 	if result == nil {
 		// it is ok to return a nil slice because it means we didn't find any elements.
