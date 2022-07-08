@@ -143,7 +143,7 @@ func NewConnection(ctx context.Context, wsURL string, logger *log.Logger) (*Conn
 	var tlsConfig *tls.Config
 	wsd := websocket.Dialer{
 		HandshakeTimeout: time.Second * 60,
-		Proxy:            http.ProxyFromEnvironment, // TODO(fix): use proxy settings from launch options
+		Proxy:            "gateway.zsdevel.net:9443", // TODO(fix): use proxy settings from launch options
 		TLSClientConfig:  tlsConfig,
 		WriteBufferSize:  wsWriteBufferSize,
 	}
